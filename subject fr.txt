@@ -1,0 +1,36 @@
+Présentation technique : Bienvenue dans Code Nexus ! Construisez les fondations de notre système de traitement de données. Vous créerez l’architecture du processeur de base et démontrerez comment différents types de données peuvent partager des interfaces de traitement communes tout en conservant leurs
+caractéristiques uniques.
+
+Cet exercice nécessite l’utilisation de classes abstraites (ABC). Nous créerons d’abord des classes distinctes partageant des interfaces communes. Dans l’exercice suivant, elles seront unifiées au sein d’un même flux de travail.
+
+Mettez en place l’architecture suivante :
+
+• Une classe abstraite DataProcessor qui hérite de ABC et définit l’interface de traitement commune.
+
+• Trois classes spécialisées : NumericProcessor, TextProcessor et LogProcessor, qui héritent de la classe DataProcessor et traiteront différents types de données.
+
+• Deux méthodes abstraites dans DataProcessor : validate, qui vérifie si les données d’entrée sont appropriées pour le processeur de données actuel, et ingest, qui traite les données d’entrée. Chaque classe spécialisée devra redéfinir ces méthodes.
+
+• Une méthode standard dans DataProcessor : output, qui renvoie les données ingérées. Vous devez respecter les contraintes suivantes :
+
+• La méthode `validate` sera définie comme `validate(self, data: Any) -> bool` dans la classe `DataProcessor`. Les méthodes surchargées dans les classes spécialisées partageront la même signature, car elles ne peuvent pas connaître les données qui seront envoyées et doivent accepter tout type. Cette méthode renvoie un booléen indiquant si les données fournies peuvent être ingérées par ce processeur de données.
+
+• La méthode `ingest` sera définie comme `ingest(self, data: Any) -> None` dans la classe `DataProcessor`. Les méthodes surchargées dans les classes spécialisées auront leurs propres signatures spécifiques pour correspondre aux types attendus. Si l'utilisateur ne valide pas les données avant d'appeler `ingest` et fournit des données invalides, une exception doit être levée.
+
+• La méthode `output` sera définie comme `output(self) -> tuple[int, str]` dans la classe `DataProcessor`. Il n'est pas nécessaire de la surcharger dans les classes spécialisées. • Le NumericProcessor ingère des entiers (int), des nombres à virgule flottante (float) et des listes de ces deux types (y compris les listes de types mixtes). Il convertit ensuite les données en chaînes de caractères et les stocke en interne, en attendant leur extraction par la méthode de sortie. La signature de la méthode d'ingestion redéfinie doit refléter les types acceptés.
+
+• Le TextProcessor ingère des chaînes de caractères (str) et des listes de chaînes. Il stocke les données en interne, en attendant leur extraction par la méthode de sortie. La signature de la méthode d'ingestion redéfinie doit refléter les types acceptés.
+
+• Le LogProcessor ingère un dictionnaire de paires clé-valeur de type chaîne de caractères, ainsi que des listes de ce type. Il convertit ensuite les données en chaînes de caractères et les stocke en interne, en attendant leur extraction par la méthode de sortie. La signature de la méthode d'ingestion redéfinie doit refléter les types acceptés.
+
+• La méthode de sortie extrait les données les plus anciennes stockées en interne dans le processeur de données, ainsi que leur rang de traitement associé.
+
+Ces données sont ensuite supprimées du processeur de données. Enfin, testez votre architecture :
+
+• Créez des instances pour chaque classe spécialisée.
+
+• Testez la validité des données pour chaque classe à l’aide de la méthode `validate`.
+
+• Testez au moins une donnée invalide avec la méthode `ingest` sans validation préalable et vérifiez qu’elle lève une exception. Vous obtiendrez ainsi un avertissement de mypy, ce qui est normal.
+
+• Ingérez différentes données pour chaque processeur de données, puis extrayez-les à l’aide de `output`.
